@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #030014; color: #e5e7eb; font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #fff; }
+  ::selection { background: rgba(139,92,246,.35); color: #fff; }
+  @keyframes auraFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes auraPulse { 0%,100% { opacity: .55; } 50% { opacity: .85; } }
+  @keyframes auraDraw { to { stroke-dashoffset: 0; } }
+  @keyframes auraBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+</style>
+</helmet>
+<div style="position:relative; overflow-x:clip; min-height:100vh;">
+
+  <!-- background glows -->
+  <div style="position:absolute; top:-320px; left:50%; transform:translateX(-50%); width:1100px; height:820px; background:radial-gradient(50% 50% at 50% 50%, rgba(139,92,246,.30), transparent 70%); filter:blur(40px); pointer-events:none; animation:auraPulse 9s ease-in-out infinite;"></div>
+  <div style="position:absolute; top:120px; right:-260px; width:680px; height:680px; background:radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.16), transparent 70%); filter:blur(50px); pointer-events:none;"></div>
+  <div style="position:absolute; top:1180px; left:-280px; width:720px; height:720px; background:radial-gradient(50% 50% at 50% 50%, rgba(139,92,246,.14), transparent 70%); filter:blur(50px); pointer-events:none;"></div>
+  <div style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px); background-size:64px 64px; mask-image:radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%); -webkit-mask-image:radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%); pointer-events:none;"></div>
+
+  <!-- NAV -->
+  <nav style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto; padding:14px 22px; margin-top:14px; border-radius:16px; background:rgba(10,10,16,.55); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#a855f7,#22d3ee); box-shadow:0 0 18px rgba(139,92,246,.55);"></div>
+      <span style="font-weight:700; font-size:17px; letter-spacing:-.02em; color:#fff;">Aura<span style="color:#a1a1aa;">AI</span></span>
+    </div>
+    <div style="display:flex; align-items:center; gap:32px; font-size:14px; color:#a1a1aa;">
+      <a href="#features">Features</a>
+      <a href="#">Platform</a>
+      <a href="#">Pricing</a>
+      <a href="#">Docs</a>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <a href="#" style="font-size:14px; color:#a1a1aa; display:none;" data-navsignin>Sign in</a>
+      <a href="#cta" style="font-size:14px; font-weight:600; color:#fff; padding:9px 18px; border-radius:10px; background:linear-gradient(135deg,#7c3aed,#a855f7); box-shadow:0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 24px rgba(124,58,237,.4); transition:transform .2s ease, box-shadow .2s ease;" style-hover="transform:translateY(-1px); box-shadow:0 0 0 1px rgba(255,255,255,.14) inset, 0 12px 34px rgba(124,58,237,.6);">Start free</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header style="position:relative; z-index:1; max-width:960px; margin:0 auto; padding:96px 22px 40px; text-align:center;">
+    <div data-reveal style="display:inline-flex; align-items:center; gap:9px; padding:6px 14px 6px 8px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); font-size:12.5px; color:#c4b5fd; margin-bottom:30px; backdrop-filter:blur(8px);">
+      <span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.06em; padding:2px 7px; border-radius:999px; background:linear-gradient(135deg,#7c3aed,#22d3ee); color:#fff;">NEW</span>
+      <span style="color:#d4d4d8;">Aura Engine 2.0 — real-time predictive models</span>
+    </div>
+    <h1 data-reveal style="margin:0; font-size:clamp(40px,6.4vw,74px); line-height:1.03; font-weight:700; letter-spacing:-.035em; color:#fff;">
+      The Future of Analytics,<br>
+      <span style="background:linear-gradient(100deg,#a855f7 0%,#c084fc 35%,#22d3ee 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">Powered by Intelligence.</span>
+    </h1>
+    <p data-reveal style="max-width:600px; margin:26px auto 0; font-size:clamp(16px,2vw,19px); line-height:1.6; color:#a1a1aa;">
+      Transform your raw database into stunning, actionable insights instantly. Built for modern tech teams.
+    </p>
+    <div data-reveal style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:38px;">
+      <a href="#cta" style="font-size:15px; font-weight:600; color:#fff; padding:13px 26px; border-radius:12px; background:linear-gradient(135deg,#7c3aed,#a855f7); box-shadow:0 0 0 1px rgba(255,255,255,.1) inset, 0 10px 30px rgba(124,58,237,.45); transition:transform .2s ease, box-shadow .2s ease;" style-hover="transform:translateY(-2px); box-shadow:0 0 0 1px rgba(255,255,255,.18) inset, 0 16px 44px rgba(124,58,237,.65);">Start Free Today</a>
+      <a href="#features" style="font-size:15px; font-weight:600; color:#e5e7eb; padding:13px 26px; border-radius:12px; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.12); backdrop-filter:blur(8px); transition:background .2s ease, border-color .2s ease;" style-hover="background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.22);">Book a demo</a>
+    </div>
+
+    <!-- DASHBOARD PREVIEW -->
+    <div data-reveal style="margin-top:66px; position:relative;">
+      <div style="position:absolute; inset:-30px -10px 20px; background:radial-gradient(60% 50% at 50% 30%, rgba(139,92,246,.35), transparent 70%); filter:blur(30px); pointer-events:none;"></div>
+      <div style="position:relative; text-align:left; border-radius:20px; overflow:hidden; background:rgba(14,14,22,.7); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.1); box-shadow:0 40px 120px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03) inset;">
+        <!-- window bar -->
+        <div style="display:flex; align-items:center; gap:14px; padding:13px 18px; border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.015);">
+          <div style="display:flex; gap:7px;"><span style="width:11px;height:11px;border-radius:50%;background:#3f3f46;"></span><span style="width:11px;height:11px;border-radius:50%;background:#3f3f46;"></span><span style="width:11px;height:11px;border-radius:50%;background:#3f3f46;"></span></div>
+          <div style="flex:1; max-width:280px; margin:0 auto; text-align:center; font-family:'Geist Mono',monospace; font-size:11px; color:#71717a; padding:5px 12px; border-radius:8px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05);">app.aura.ai/dashboard</div>
+          <div style="width:60px;"></div>
+        </div>
+        <!-- body -->
+        <div style="display:grid; grid-template-columns:190px 1fr; min-height:340px;" data-dash-grid>
+          <!-- sidebar -->
+          <aside style="border-right:1px solid rgba(255,255,255,.06); padding:18px 14px; display:flex; flex-direction:column; gap:6px;" data-dash-side>
+            <div style="font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.12em; color:#52525b; padding:0 8px 8px;">WORKSPACE</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; background:rgba(139,92,246,.14); border:1px solid rgba(139,92,246,.28); font-size:13px; color:#fff;"><span style="width:7px;height:7px;border-radius:2px;background:#a855f7;box-shadow:0 0 8px #a855f7;"></span>Overview</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; font-size:13px; color:#a1a1aa;"><span style="width:7px;height:7px;border-radius:2px;background:#3f3f46;"></span>Cohorts</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; font-size:13px; color:#a1a1aa;"><span style="width:7px;height:7px;border-radius:2px;background:#3f3f46;"></span>Funnels</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; font-size:13px; color:#a1a1aa;"><span style="width:7px;height:7px;border-radius:2px;background:#3f3f46;"></span>Predictions</div>
+            <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px; font-size:13px; color:#a1a1aa;"><span style="width:7px;height:7px;border-radius:2px;background:#3f3f46;"></span>Reports</div>
+          </aside>
+          <!-- main -->
+          <main style="padding:22px 24px;">
+            <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px;">
+              <div>
+                <div style="font-size:13px; color:#a1a1aa;">Total revenue</div>
+                <div style="font-size:30px; font-weight:700; letter-spacing:-.02em; color:#fff; margin-top:2px;">$2.84M</div>
+              </div>
+              <div style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:#34d399; padding:5px 10px; border-radius:999px; background:rgba(52,211,153,.1); border:1px solid rgba(52,211,153,.22);">▲ 24.6% vs last month</div>
+            </div>
+            <!-- chart -->
+            <div style="position:relative; height:180px;" data-chart></div>
+            <div style="display:flex; gap:14px; margin-top:16px;">
+              <div style="flex:1; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.06);"><div style="font-size:11px; color:#71717a;">Active users</div><div style="font-size:18px; font-weight:600; color:#fff; margin-top:3px;">48,209</div></div>
+              <div style="flex:1; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.06);"><div style="font-size:11px; color:#71717a;">Conversion</div><div style="font-size:18px; font-weight:600; color:#fff; margin-top:3px;">6.9%</div></div>
+              <div style="flex:1; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.06);"><div style="font-size:11px; color:#71717a;">Forecast acc.</div><div style="font-size:18px; font-weight:600; color:#22d3ee; margin-top:3px;">98.2%</div></div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOGO STRIP -->
+  <section data-reveal style="max-width:1000px; margin:70px auto 0; padding:0 22px; text-align:center;">
+    <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.14em; color:#52525b; margin-bottom:22px;">TRUSTED BY FAST-MOVING TEAMS</div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:44px; opacity:.6;">
+      <span style="font-size:19px; font-weight:700; letter-spacing:-.02em; color:#d4d4d8;">Nebula</span>
+      <span style="font-size:19px; font-weight:700; letter-spacing:-.02em; color:#d4d4d8;">Vertex</span>
+      <span style="font-size:19px; font-weight:700; letter-spacing:-.02em; color:#d4d4d8;">Quanta</span>
+      <span style="font-size:19px; font-weight:700; letter-spacing:-.02em; color:#d4d4d8;">Loomly</span>
+      <span style="font-size:19px; font-weight:700; letter-spacing:-.02em; color:#d4d4d8;">Fathom</span>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" style="position:relative; z-index:1; max-width:1200px; margin:130px auto 0; padding:0 22px;">
+    <div data-reveal style="text-align:center; max-width:640px; margin:0 auto 56px;">
+      <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.14em; color:#a855f7; margin-bottom:16px;">CAPABILITIES</div>
+      <h2 style="margin:0; font-size:clamp(30px,4.2vw,46px); line-height:1.08; font-weight:700; letter-spacing:-.03em; color:#fff;">Everything you need to move at intelligence speed</h2>
+      <p style="margin:18px auto 0; font-size:16px; line-height:1.6; color:#a1a1aa; max-width:520px;">A single platform that ingests, models, and predicts — so your team ships decisions, not dashboards.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;" data-feat-grid>
+      <div data-reveal data-card style="position:relative; padding:30px 26px; border-radius:18px; background:rgba(16,16,24,.55); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.08); overflow:hidden; transition:transform .25s ease, border-color .25s ease;">
+        <div data-glow style="position:absolute; inset:0; opacity:0; transition:opacity .3s ease; background:radial-gradient(240px 180px at var(--mx,50%) var(--my,0%), rgba(139,92,246,.22), transparent 70%); pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(139,92,246,.05)); border:1px solid rgba(139,92,246,.3); margin-bottom:20px;"><div style="width:16px;height:16px;border-radius:5px;background:linear-gradient(135deg,#a855f7,#c084fc);box-shadow:0 0 14px rgba(168,85,247,.7);"></div></div>
+          <h3 style="margin:0 0 10px; font-size:19px; font-weight:600; letter-spacing:-.02em; color:#fff;">Predictive Modeling</h3>
+          <p style="margin:0; font-size:14.5px; line-height:1.65; color:#a1a1aa;">Auto-trained models forecast churn, revenue, and demand with 98% accuracy — no data science team required.</p>
+        </div>
+      </div>
+      <div data-reveal data-card style="position:relative; padding:30px 26px; border-radius:18px; background:rgba(16,16,24,.55); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.08); overflow:hidden; transition:transform .25s ease, border-color .25s ease;">
+        <div data-glow style="position:absolute; inset:0; opacity:0; transition:opacity .3s ease; background:radial-gradient(240px 180px at var(--mx,50%) var(--my,0%), rgba(34,211,238,.22), transparent 70%); pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(34,211,238,.05)); border:1px solid rgba(34,211,238,.3); margin-bottom:20px;"><div style="width:16px;height:16px;border-radius:5px;background:linear-gradient(135deg,#22d3ee,#67e8f9);box-shadow:0 0 14px rgba(34,211,238,.7);"></div></div>
+          <h3 style="margin:0 0 10px; font-size:19px; font-weight:600; letter-spacing:-.02em; color:#fff;">Real-time Pipelines</h3>
+          <p style="margin:0; font-size:14.5px; line-height:1.65; color:#a1a1aa;">Stream events from any source and watch insights update live. Sub-second latency from ingest to answer.</p>
+        </div>
+      </div>
+      <div data-reveal data-card style="position:relative; padding:30px 26px; border-radius:18px; background:rgba(16,16,24,.55); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.08); overflow:hidden; transition:transform .25s ease, border-color .25s ease;">
+        <div data-glow style="position:absolute; inset:0; opacity:0; transition:opacity .3s ease; background:radial-gradient(240px 180px at var(--mx,50%) var(--my,0%), rgba(139,92,246,.22), transparent 70%); pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(34,211,238,.08)); border:1px solid rgba(255,255,255,.14); margin-bottom:20px;"><div style="width:16px;height:16px;border-radius:5px;background:linear-gradient(135deg,#a855f7,#22d3ee);box-shadow:0 0 14px rgba(139,92,246,.6);"></div></div>
+          <h3 style="margin:0 0 10px; font-size:19px; font-weight:600; letter-spacing:-.02em; color:#fff;">Natural Language Queries</h3>
+          <p style="margin:0; font-size:14.5px; line-height:1.65; color:#a1a1aa;">Ask questions in plain English. Aura writes the query, runs it, and returns a chart you can trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" style="position:relative; z-index:1; max-width:1080px; margin:140px auto 0; padding:0 22px;">
+    <div data-reveal style="position:relative; overflow:hidden; border-radius:28px; padding:80px 32px; text-align:center; background:rgba(14,14,22,.6); backdrop-filter:blur(18px); border:1px solid rgba(255,255,255,.1);">
+      <div style="position:absolute; top:-160px; left:50%; transform:translateX(-50%); width:760px; height:520px; background:radial-gradient(50% 50% at 50% 50%, rgba(139,92,246,.4), transparent 70%); filter:blur(40px); pointer-events:none; animation:auraPulse 8s ease-in-out infinite;"></div>
+      <div style="position:absolute; bottom:-180px; right:-80px; width:520px; height:520px; background:radial-gradient(50% 50% at 50% 50%, rgba(34,211,238,.22), transparent 70%); filter:blur(46px); pointer-events:none;"></div>
+      <div style="position:relative;">
+        <h2 style="margin:0; font-size:clamp(32px,5vw,54px); line-height:1.05; font-weight:700; letter-spacing:-.035em; color:#fff;">Start free today.</h2>
+        <p style="margin:20px auto 0; max-width:460px; font-size:17px; line-height:1.6; color:#a1a1aa;">Connect your first data source in minutes. No credit card, no setup calls — just insight.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:36px;">
+          <a href="#" style="font-size:15px; font-weight:600; color:#fff; padding:14px 30px; border-radius:12px; background:linear-gradient(135deg,#7c3aed,#a855f7); box-shadow:0 0 0 1px rgba(255,255,255,.12) inset, 0 12px 36px rgba(124,58,237,.5); transition:transform .2s ease, box-shadow .2s ease;" style-hover="transform:translateY(-2px); box-shadow:0 0 0 1px rgba(255,255,255,.2) inset, 0 18px 50px rgba(124,58,237,.7);">Get started free</a>
+          <a href="#" style="font-size:15px; font-weight:600; color:#e5e7eb; padding:14px 30px; border-radius:12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14); transition:background .2s ease;" style-hover="background:rgba(255,255,255,.1);">Talk to sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; z-index:1; max-width:1200px; margin:80px auto 0; padding:36px 22px 48px; border-top:1px solid rgba(255,255,255,.06); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:22px; height:22px; border-radius:7px; background:linear-gradient(135deg,#a855f7,#22d3ee);"></div>
+      <span style="font-weight:600; color:#d4d4d8; font-size:15px;">AuraAI</span>
+    </div>
+    <div style="font-size:13px; color:#52525b;">© 2026 AuraAI, Inc. All rights reserved.</div>
+    <div style="display:flex; gap:24px; font-size:13.5px; color:#a1a1aa;"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Status</a></div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = this.el || document;
+    // scroll reveal
+    const items = Array.from(root.querySelectorAll('[data-reveal]'));
+    items.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(26px)';
+      el.style.transition = 'opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)';
+      el.style.willChange = 'opacity, transform';
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+          setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, delay);
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    items.forEach(el => io.observe(el));
+
+    // feature card pointer glow + lift
+    root.querySelectorAll('[data-card]').forEach(card => {
+      const glow = card.querySelector('[data-glow]');
+      card.addEventListener('pointermove', (ev) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((ev.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--my', ((ev.clientY - r.top) / r.height * 100) + '%');
+      });
+      card.addEventListener('pointerenter', () => {
+        if (glow) glow.style.opacity = '1';
+        card.style.transform = 'translateY(-6px)';
+        card.style.borderColor = 'rgba(255,255,255,.18)';
+      });
+      card.addEventListener('pointerleave', () => {
+        if (glow) glow.style.opacity = '0';
+        card.style.transform = 'translateY(0)';
+        card.style.borderColor = 'rgba(255,255,255,.08)';
+      });
+    });
+
+    // build mock chart
+    const host = root.querySelector('[data-chart]');
+    if (host) host.appendChild(this.buildChart());
+
+    // responsive tweaks
+    const applyResponsive = () => {
+      const w = (root.getBoundingClientRect ? root.getBoundingClientRect().width : window.innerWidth);
+      const grid = root.querySelector('[data-feat-grid]');
+      if (grid) grid.style.gridTemplateColumns = w < 820 ? '1fr' : 'repeat(3,1fr)';
+      const dash = root.querySelector('[data-dash-grid]');
+      const side = root.querySelector('[data-dash-side]');
+      if (dash && side) {
+        if (w < 640) { dash.style.gridTemplateColumns = '1fr'; side.style.display = 'none'; }
+        else { dash.style.gridTemplateColumns = '190px 1fr'; side.style.display = 'flex'; }
+      }
+      const links = root.querySelector('nav > div:nth-child(2)');
+      if (links) links.style.display = w < 720 ? 'none' : 'flex';
+    };
+    applyResponsive();
+    this._ro = new ResizeObserver(applyResponsive);
+    this._ro.observe(root.firstElementChild || root);
+    window.addEventListener('resize', applyResponsive);
+    this._resizeHandler = applyResponsive;
+  }
+
+  componentWillUnmount() {
+    if (this._ro) this._ro.disconnect();
+    if (this._resizeHandler) window.removeEventListener('resize', this._resizeHandler);
+  }
+
+  buildChart() {
+    const NS = 'http://www.w3.org/2000/svg';
+    const W = 560, H = 180;
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.style.display = 'block';
+
+    const defs = document.createElementNS(NS, 'defs');
+    defs.innerHTML =
+      '<linearGradient id="auraArea" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="#a855f7" stop-opacity="0.42"/>' +
+        '<stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>' +
+      '</linearGradient>' +
+      '<linearGradient id="auraLine" x1="0" y1="0" x2="1" y2="0">' +
+        '<stop offset="0%" stop-color="#a855f7"/>' +
+        '<stop offset="100%" stop-color="#22d3ee"/>' +
+      '</linearGradient>';
+    svg.appendChild(defs);
+
+    // gridlines
+    for (let i = 1; i <= 3; i++) {
+      const y = (H / 4) * i;
+      const ln = document.createElementNS(NS, 'line');
+      ln.setAttribute('x1', 0); ln.setAttribute('x2', W);
+      ln.setAttribute('y1', y); ln.setAttribute('y2', y);
+      ln.setAttribute('stroke', 'rgba(255,255,255,.05)');
+      ln.setAttribute('stroke-width', '1');
+      svg.appendChild(ln);
+    }
+
+    const data = [0.42, 0.35, 0.5, 0.46, 0.62, 0.58, 0.72, 0.68, 0.83, 0.79, 0.92, 0.98];
+    const pad = 6;
+    const pts = data.map((v, i) => {
+      const x = pad + (i / (data.length - 1)) * (W - pad * 2);
+      const y = H - pad - v * (H - pad * 2);
+      return [x, y];
+    });
+    const linePath = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    const areaPath = linePath + ` L${pts[pts.length-1][0].toFixed(1)} ${H} L${pts[0][0].toFixed(1)} ${H} Z`;
+
+    const area = document.createElementNS(NS, 'path');
+    area.setAttribute('d', areaPath);
+    area.setAttribute('fill', 'url(#auraArea)');
+    svg.appendChild(area);
+
+    const line = document.createElementNS(NS, 'path');
+    line.setAttribute('d', linePath);
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', 'url(#auraLine)');
+    line.setAttribute('stroke-width', '2.5');
+    line.setAttribute('stroke-linecap', 'round');
+    line.setAttribute('stroke-linejoin', 'round');
+    const len = 1400;
+    line.style.strokeDasharray = len;
+    line.style.strokeDashoffset = len;
+    line.style.animation = 'auraDraw 1.8s cubic-bezier(.4,0,.2,1) .3s forwards';
+    svg.appendChild(line);
+
+    // end dot
+    const last = pts[pts.length - 1];
+    const halo = document.createElementNS(NS, 'circle');
+    halo.setAttribute('cx', last[0]); halo.setAttribute('cy', last[1]); halo.setAttribute('r', 6);
+    halo.setAttribute('fill', '#22d3ee'); halo.setAttribute('opacity', '.25');
+    svg.appendChild(halo);
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', last[0]); dot.setAttribute('cy', last[1]); dot.setAttribute('r', 3.2);
+    dot.setAttribute('fill', '#22d3ee');
+    svg.appendChild(dot);
+
+    return svg;
+  }
+}
+</script>
+</body>
+</html>

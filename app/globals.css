@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #030014;
+  --foreground: #e5e7eb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-aura-violet: #a855f7;
+  --color-aura-violet-deep: #7c3aed;
+  --color-aura-violet-light: #c084fc;
+  --color-aura-cyan: #22d3ee;
+
+  --breakpoint-nav: 720px;
+  --breakpoint-feat: 820px;
+
+  --animate-aura-pulse: auraPulse 9s ease-in-out infinite;
+}
+
+@keyframes auraFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes auraPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.85; }
+}
+@keyframes auraDraw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes auraBar {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+a:hover {
+  color: #fff;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: #fff;
+}
+
+.text-gradient-aura {
+  background: linear-gradient(100deg, #a855f7 0%, #c084fc 35%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
