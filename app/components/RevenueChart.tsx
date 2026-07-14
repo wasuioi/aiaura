@@ -1,17 +1,20 @@
 "use client";
 
-// Recolored: single brick hue. The old line was a violet-to-cyan gradient —
-// the exact two-hue gradient tell. The area fill still fades, but it's the
-// same hue at different opacities (a shade ramp), not a second color.
+// Single brick hue. The old line was a violet-to-cyan gradient — the exact
+// two-hue gradient tell. The area fill still fades, but it's the same hue at
+// different opacities (a shade ramp), not a second color.
+//
+// `direction` deliberately does NOT change the palette: a falling line stays
+// brick, it does not turn red. It only describes the series to screen readers,
+// which cannot see the shape.
 
-const DATA = [0.42, 0.35, 0.5, 0.46, 0.62, 0.58, 0.72, 0.68, 0.83, 0.79, 0.92, 0.98];
 const W = 560;
 const H = 180;
 const PAD = 6;
 
-function buildPaths() {
-  const pts = DATA.map((v, i) => {
-    const x = PAD + (i / (DATA.length - 1)) * (W - PAD * 2);
+function buildPaths(data: number[]) {
+  const pts = data.map((v, i) => {
+    const x = PAD + (i / (data.length - 1)) * (W - PAD * 2);
     const y = H - PAD - v * (H - PAD * 2);
     return [x, y] as const;
   });
@@ -24,8 +27,16 @@ function buildPaths() {
   return { pts, linePath, areaPath };
 }
 
-export function RevenueChart() {
-  const { pts, linePath, areaPath } = buildPaths();
+export function RevenueChart({
+  data,
+  label,
+  direction,
+}: {
+  data: number[];
+  label: string;
+  direction: "up" | "down";
+}) {
+  const { pts, linePath, areaPath } = buildPaths(data);
   const [lastX, lastY] = pts[pts.length - 1];
   const strokeLen = 1400;
 
@@ -37,6 +48,8 @@ export function RevenueChart() {
         width="100%"
         height="100%"
         className="block"
+        role="img"
+        aria-label={`${label}: trending ${direction}`}
       >
         <defs>
           <linearGradient id="brickArea" x1="0" y1="0" x2="0" y2="1">
