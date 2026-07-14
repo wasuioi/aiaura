@@ -1,7 +1,8 @@
-# De-genericize pass — status report (v2)
+# De-genericize pass — status report (v2 + follow-up fixes)
 
 > Audience: AI coding agents (and humans) picking up this repo later.
-> Date: 2026-07-14. Branch: `degenericize-landing`. v2 supersedes v1.
+> Date: 2026-07-14. Branch: `degenericize-landing`, PR #1. v2 supersedes v1;
+> three follow-up fixes landed after v2 (see "Follow-up fixes" below).
 
 ## Concept commitment
 
@@ -72,6 +73,56 @@ intentional.
   `#d4664f`, `#100b0a`, `cursorBlink`. Contains **no** `a855f7` / `22d3ee`.
 - Dev server: page renders with the answer block hidden on first paint and the
   question typing on the client — i.e. the sequence works as designed.
+
+## Follow-up fixes (after v2, user-driven)
+
+All three verified in a real browser (Playwright against a production build),
+not just typecheck.
+
+### 1. Typing starts on scroll-into-view, not on mount (`9bba09d`)
+
+User feedback: the preview sits below the hero, so a visitor reading the
+headline first missed the whole typing animation and arrived at a finished mock.
+
+- `DashboardPreview` now gates the sequence on an `IntersectionObserver`
+  (threshold 0.35, one-shot, 400ms start delay so it doesn't begin mid-scroll).
+- `RevenueChart` is now **mounted at reveal** rather than at page mount — its
+  line-draw is a CSS animation, so mounting earlier would finish it off-screen.
+  A 180px placeholder holds the height; no layout shift.
+- `prefers-reduced-motion` still shows the complete final state immediately at
+  load, with no waiting on scroll. Deliberate: reduced-motion users should not
+  have to wait for anything. (If "reveal on scroll without animation" is wanted
+  instead, that's a one-line change in the reduced-motion branch.)
+- Verified: at load the question box is empty / answer hidden / chart unmounted
+  even after 2.5s; after scrolling, typing is observably incremental; settled
+  state shows everything.
+
+### 2. Preview no longer overflows its card (`9bba09d`)
+
+Found while screenshotting fix 1 (also visible in the user's screenshot): the
+nowrap SQL line widened the grid's main column past the card — squeezed sidebar,
+clipped right edge. Root cause: grid items default to `min-width: auto`, which
+prevents the `overflow-x-auto` container from shrinking. Fix: `min-w-0` on the
+preview's `<main>` column. Verified: grid `scrollWidth == clientWidth`, sidebar
+at its full 190px, no horizontal page scroll at 390px viewport.
+
+### 3. SQL strip scrollbar themed (`21f6e4c`)
+
+User feedback: the horizontal scrollbar under the SQL line rendered as the
+bright Windows default — stray light chrome inside a dark card. Added
+`.scroll-warm` in `globals.css` (thin, 6px; thumb `warm-800`, hover
+`brick-700`, transparent track; both `scrollbar-color` and the
+`::-webkit-scrollbar-*` properties) and applied it to the SQL container.
+Verified via computed style in the browser: `scrollbar-width: thin`,
+`scrollbar-color: rgb(58,50,46) transparent`.
+
+### Operational note for future agents
+
+Turbopack's dev server served **stale CSS twice** in this session after files
+changed underneath it (edits to `globals.css` / bulk file swaps). Symptom:
+markup updates but new CSS classes have no effect (computed styles stay
+`auto`). Fix: kill the dev server, delete `.next`, restart. If a change
+"didn't take," verify against a fresh server before debugging the code.
 
 ## Still open
 
