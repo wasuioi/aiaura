@@ -1,10 +1,15 @@
 import { BackgroundGlows } from "@/app/components/BackgroundGlows";
 import { Nav } from "@/app/components/Nav";
 import { Hero } from "@/app/components/Hero";
-import { LogoStrip } from "@/app/components/LogoStrip";
 import { Features } from "@/app/components/Features";
 import { CTA } from "@/app/components/CTA";
 import { Footer } from "@/app/components/Footer";
+
+// LogoStrip removed: it rendered fabricated customer names
+// (Nebula, Vertex, Quanta...). For a portfolio piece with no real
+// customers, no trust section is more credible than a fake one —
+// reviewers who check closely will spot invented logos immediately,
+// and that costs more trust than the section was ever going to add.
 
 export default function Home() {
   return (
@@ -12,7 +17,6 @@ export default function Home() {
       <BackgroundGlows />
       <Nav />
       <Hero />
-      <LogoStrip />
       <Features />
       <CTA />
       <Footer />

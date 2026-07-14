@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AuraAI — The Future of Analytics, Powered by Intelligence",
+  title: "AuraAI — Ask your database what happened. In English, not SQL.",
   description:
-    "Transform your raw database into stunning, actionable insights instantly. Built for modern tech teams.",
+    "Connect Postgres or Stripe and ask plain-English questions about your own data. Aura writes the SQL, runs it, and shows you the answer — query included.",
 };
 
 export default function RootLayout({
