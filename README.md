@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AuraAI
 
-## Getting Started
+A concept landing page for a fictional product: a natural-language analytics
+tool for solo founders — connect Postgres or Stripe, ask a question in plain
+English, and see the SQL behind every answer.
 
-First, run the development server:
+There is no backend and no company. The page is a portfolio piece, and the
+interesting part is not the code — it's why the page looks and behaves the way
+it does.
+
+**→ [Behind this build](./BEHIND-THIS-BUILD.md)** — the decisions: the concept
+it commits to, the template defaults it strips out (one hue, one animated
+moment, no fake customer logos), and the bugs worth remembering.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The landing page is a single route — `app/page.tsx` composes it from the
+sections in `app/components/`. The interactive demo lives in
+`DashboardPreview.tsx`, and the four canned answers it shows are the only
+"data" in the project: `app/data/cannedQueries.ts`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
+Next.js (App Router) · Tailwind v4 · TypeScript
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Notes for anyone (or any agent) working on this: [`AGENTS.md`](./AGENTS.md) for
+repo gotchas, [`docs/reports/`](./docs/reports/) for the full change log and the
+constraints to keep.
