@@ -1,52 +1,89 @@
-# De-genericize pass — status report
+# De-genericize pass — status report (v2)
 
 > Audience: AI coding agents (and humans) picking up this repo later.
-> Date: 2026-07-14. Branch: `degenericize-landing`.
+> Date: 2026-07-14. Branch: `degenericize-landing`. v2 supersedes v1.
 
 ## Concept commitment
 
-The landing page no longer uses generic AI-SaaS template copy. It is now written
-to **one concrete fictional concept**: AuraAI is a natural-language analytics
-tool for **solo SaaS founders** who connect **Postgres/Stripe** and ask
-plain-English questions instead of writing SQL. Any future copy edits must stay
-specific to this concept. If the concept changes, all copy needs a full rewrite —
-do not drift back to generic phrasing.
+AuraAI is a fictional portfolio piece: a natural-language analytics tool for
+**solo SaaS founders** — connect Postgres/Stripe, ask questions in plain English
+instead of writing SQL, and **every answer shows the query behind it**. All copy
+is written to that concept. Keep any future copy equally specific; do not drift
+back to generic AI-SaaS phrasing.
 
-## Done in this pass
+## Design system (v2) — the brand decision is now made
+
+The violet→cyan gradient on blue-violet black (the single most recognizable "AI
+default" scheme) has been **replaced**. New system:
+
+| Token | Hex | Use |
+|---|---|---|
+| `background` | `#100b0a` | Page background (warm black) |
+| `brick-300` | `#e08573` | SQL text, light accents |
+| `brick-400` | `#d4664f` | Hover states, chart line, headline accent |
+| `brick-500` | `#c4483a` | Primary buttons, logo mark |
+| `brick-600` | `#9e3527` | Borders/tints of active items |
+| `warm-050` | `#f0ebe7` | Primary text |
+| `warm-200` | `#cfc7c0` | Secondary text |
+| `warm-400` | `#a89f98` | Muted text |
+| `warm-600` | `#6e655f` | Labels, faint text |
+| `warm-800` | `#3a322e` | Borders |
+| `warm-900` | `#1c1512` | Card surfaces |
+| `delta-up` | `#7fb069` | Positive deltas in charts ONLY (semantic) |
+
+Tokens live in `app/globals.css` under `@theme inline` (Tailwind v4), so
+`bg-brick-500`, `text-warm-400`, `border-warm-800` etc. work everywhere.
+
+**Rules:** one accent hue only — never introduce a second. Never put a two-hue
+gradient on any UI element. `delta-up` green is semantic-only.
+
+**Typography:** Geist (create-next-app default) is gone. `Space Grotesk`
+(`--font-display`) for headlines/body; `JetBrains Mono` (`--font-code`) for
+labels, the typed question, and SQL — the mono face does concept work.
+
+**Motion:** exactly ONE animated flourish on the page — the question in
+`DashboardPreview` types itself, then answer/chart/SQL fade in, gated on typing
+completion. `prefers-reduced-motion` shows the final state immediately. Do not
+add more animation (no scroll-following lines, meteors, cursor glows, floating
+blobs). The stillness everywhere else is what makes the one moment read as
+intentional.
+
+## Done
 
 | File | Change |
 |---|---|
-| `app/page.tsx` | Removed `LogoStrip` import/usage; comment explains why. |
-| `app/components/Hero.tsx` | New concept-specific headline/subtext/CTAs ("Ask your database what happened. In English, not SQL."). Removed the fabricated "NEW — Aura Engine 2.0" badge. |
-| `app/components/Features.tsx` | Restructured 3 equal cards → 1 wide lead card + 2 supporting cards. All copy rewritten to the concept. Removed fabricated stats ("98% accuracy", "sub-second latency"). |
-| `app/components/CTA.tsx` | New concept-specific headline ("Stop exporting CSVs at midnight.") and button labels. |
-| `app/components/DashboardPreview.tsx` | Rebuilt from generic BI-dashboard mockup ("$2.84M revenue", nav sidebar) into the actual product interaction: typed question → plain-English answer → chart → the SQL behind it, with a "recent questions" sidebar. |
-| `app/components/LogoStrip.tsx` | **Deleted.** It hardcoded fake customer names (Nebula, Vertex, Quanta, Loomly, Fathom) under "TRUSTED BY" — fabricated social proof, high-risk for a portfolio piece. |
-| `app/layout.tsx` | **Not in the original handoff — added during application.** The `<title>` and meta description still carried the old generic copy ("The Future of Analytics, Powered by Intelligence"). Updated both to match the new concept. |
+| `app/globals.css` | Brick + warm-gray token system; removed violet/cyan tokens, `.text-gradient-aura`, `.grid-overlay`, glow keyframes. Added `cursorBlink` / `fadeUp`. |
+| `app/layout.tsx` | Space Grotesk + JetBrains Mono; concept-specific title/description (old generic headline was leaking into browser tabs and link previews). |
+| `app/page.tsx` | Removed `LogoStrip` and `BackgroundGlows`. |
+| `app/components/Nav.tsx` | Solid brick logo mark + button (no gradient); nav links match the concept. |
+| `app/components/Hero.tsx` | Concept headline/subtext/CTAs; solid brick accent instead of gradient text. |
+| `app/components/Features.tsx` | 1 lead card + 2 supporting (not 3 equal); concept copy; no fabricated stats. |
+| `app/components/FeatureCard.tsx` | Accents cut from 3 (violet/cyan/mixed) to 2 (`brick` / `neutral`); removed the pointer-tracking glow. |
+| `app/components/DashboardPreview.tsx` | The product's actual interaction: typed question → answer → chart → the SQL that ran. Hosts the page's one animation. |
+| `app/components/RevenueChart.tsx` | Single brick hue; the old violet→cyan line gradient is gone. Area fill is one hue at varying opacity (shade ramp, not a two-hue gradient). |
+| `app/components/CTA.tsx` | Concept copy; both animated radial-glow blobs removed. |
+| `app/components/Footer.tsx` | Solid brick mark; warm-gray text. |
+| `BackgroundGlows.tsx`, `LogoStrip.tsx` | **Deleted** (glow blobs; fabricated customer logos). |
 
 ### Verification performed
 
-- `npm run dev` (Next.js 16.2.10 / Turbopack): compiles cleanly, no missing-import errors.
-- Rendered HTML at `/` checked programmatically: all new copy present; all removed
-  strings (Aura Engine 2.0, Nebula, TRUSTED BY, $2.84M, 98% accuracy,
-  Future of Analytics) confirmed absent.
+- `next build` passes clean (TypeScript OK, static pages generated, fonts fetch).
+- Production CSS inspected: contains Space Grotesk, JetBrains Mono, `#c4483a`,
+  `#d4664f`, `#100b0a`, `cursorBlink`. Contains **no** `a855f7` / `22d3ee`.
+- Dev server: page renders with the answer block hidden on first paint and the
+  question typing on the client — i.e. the sequence works as designed.
 
-## NOT done — waiting on user decisions
+## Still open
 
-1. **Brand color palette.** The violet→cyan gradient tokens in `app/globals.css`
-   (`--color-aura-violet`, `--color-aura-cyan`) are themselves a known
-   generic-AI-SaaS signal (purple/blue gradient on near-black). Whether to keep
-   or replace them is a **brand decision the user has not made**. Do NOT change
-   `globals.css` unless explicitly asked.
-2. **Metadata wording.** The new `<title>`/description in `app/layout.tsx` were
-   written by the agent, not specified in the handoff. User may want different
-   wording; the concept constraint above still applies.
+Nothing is blocked on a user decision. The brand-palette question left open in v1
+has been answered by v2 (brick). Remaining items are ordinary polish, not
+decisions: real responsive checks on a physical phone, and a copy pass on the
+`layout.tsx` title/description if the user wants different wording.
 
-## Guardrails for future edits
+## Guardrails — do not reintroduce
 
-Do not reintroduce:
-
-- Fabricated stats or precision claims ("98% accuracy", "$2.84M").
-- Fake customer logos or invented social proof.
-- Generic "The Future of X, Powered by Y"-style headlines.
-- Unlabeled version/"NEW" badges implying releases that don't exist.
+- Fabricated stats ("98% accuracy", "$2.84M") or fake customer logos.
+- Generic "The Future of X, Powered by Y" headlines; unlabeled "NEW" badges.
+- Two-hue gradients on UI elements; a second accent hue; decorative glow blobs.
+- Extra animations beyond the single typing moment.
+- Inter/Geist as the page font.
