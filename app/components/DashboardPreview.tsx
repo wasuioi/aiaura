@@ -6,11 +6,17 @@ import { RevenueChart } from "@/app/components/RevenueChart";
 // The page's ONE animated moment: the question types itself, then the
 // answer, chart, and SQL appear in sequence. Everything else on the page
 // stays still — the stillness is what makes this read as intentional.
+//
+// Typing starts when the preview scrolls into view, not on mount: the
+// preview sits below the hero, so a visitor reading the headline first
+// would otherwise miss the whole animation and arrive at a static mock.
 // Respects prefers-reduced-motion: shows the final state immediately.
 
 const QUESTION = "Why did signups drop last week?";
 const TYPE_SPEED_MS = 45;
 const ANSWER_DELAY_MS = 350;
+// Beat before typing starts, so it doesn't begin mid-scroll.
+const START_DELAY_MS = 400;
 
 const RECENT_QUESTIONS = [
   "Which plan converts best?",
@@ -24,33 +30,55 @@ const SQL_PREVIEW =
 export function DashboardPreview() {
   const [typed, setTyped] = useState("");
   const [done, setDone] = useState(false);
-  const started = useRef(false);
+  const frameRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
+    const el = frameRef.current;
+    if (!el) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setTyped(QUESTION);
       setDone(true);
       return;
     }
 
-    let i = 0;
-    const timer = setInterval(() => {
-      i += 1;
-      setTyped(QUESTION.slice(0, i));
-      if (i >= QUESTION.length) {
-        clearInterval(timer);
-        setTimeout(() => setDone(true), ANSWER_DELAY_MS);
-      }
-    }, TYPE_SPEED_MS);
-    return () => clearInterval(timer);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    let typeTimer: ReturnType<typeof setInterval> | undefined;
+
+    const type = () => {
+      let i = 0;
+      typeTimer = setInterval(() => {
+        i += 1;
+        setTyped(QUESTION.slice(0, i));
+        if (i >= QUESTION.length) {
+          clearInterval(typeTimer);
+          timers.push(setTimeout(() => setDone(true), ANSWER_DELAY_MS));
+        }
+      }, TYPE_SPEED_MS);
+    };
+
+    // Start only once the mock is actually on screen, then never again.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.disconnect();
+          timers.push(setTimeout(type, START_DELAY_MS));
+        }
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(typeTimer);
+      timers.forEach(clearTimeout);
+    };
   }, []);
 
   return (
-    <div className="relative mt-[66px]">
+    <div ref={frameRef} className="relative mt-[66px]">
       <div className="relative overflow-hidden rounded-[20px] border border-warm-800 bg-warm-900/70 text-left shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
         {/* window bar */}
         <div className="flex items-center gap-3.5 border-b border-warm-800 bg-white/[0.015] px-[18px] py-[13px]">
@@ -86,7 +114,10 @@ export function DashboardPreview() {
           </aside>
 
           {/* main */}
-          <main className="px-6 py-[22px]">
+          {/* min-w-0: a grid item defaults to min-width:auto, so the nowrap SQL
+              line below would widen this column past the card instead of
+              scrolling inside its own overflow container. */}
+          <main className="min-w-0 px-6 py-[22px]">
             {/* the typed question */}
             <div className="mb-5 flex items-center gap-2.5 rounded-xl border border-warm-800 bg-black/25 px-4 py-3 font-mono text-[13.5px] text-warm-050">
               <span className="text-brick-400">{">"}</span>
@@ -114,7 +145,11 @@ export function DashboardPreview() {
               <div className="mb-1.5 text-[11px] text-warm-600">
                 New signups &middot; last 14 days
               </div>
-              <RevenueChart />
+              {/* Mounted only on reveal: the line's draw animation is a CSS
+                  animation, so mounting it earlier would finish it off-screen
+                  and the chart would already be drawn by the time it's seen.
+                  The placeholder holds the height so nothing shifts. */}
+              {done ? <RevenueChart /> : <div className="h-[180px]" />}
 
               <div className="mt-4 overflow-x-auto rounded-xl border border-warm-800 bg-white/[0.025] px-3.5 py-3">
                 <div className="mb-1 font-mono text-[10px] tracking-[0.1em] text-warm-600">
