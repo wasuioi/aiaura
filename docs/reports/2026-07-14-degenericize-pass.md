@@ -1,8 +1,9 @@
-# De-genericize pass — status report (v2 + follow-up fixes)
+# De-genericize pass — status report (v2 → v3)
 
 > Audience: AI coding agents (and humans) picking up this repo later.
-> Date: 2026-07-14. Branch: `degenericize-landing`, PR #1. v2 supersedes v1;
-> three follow-up fixes landed after v2 (see "Follow-up fixes" below).
+> Started 2026-07-14, last updated 2026-07-15. Branch: `degenericize-landing`,
+> PR #1. Read in order: v2 (design system) → follow-up fixes → v3 (the preview
+> is now interactive). v2 superseded v1; v1 is not recorded here.
 
 ## Concept commitment
 
@@ -116,25 +117,71 @@ bright Windows default — stray light chrome inside a dark card. Added
 Verified via computed style in the browser: `scrollbar-width: thin`,
 `scrollbar-color: rgb(58,50,46) transparent`.
 
-### Operational note for future agents
+### Operational note
 
-Turbopack's dev server served **stale CSS twice** in this session after files
-changed underneath it (edits to `globals.css` / bulk file swaps). Symptom:
-markup updates but new CSS classes have no effect (computed styles stay
-`auto`). Fix: kill the dev server, delete `.next`, restart. If a change
-"didn't take," verify against a fresh server before debugging the code.
+Turbopack's dev server served **stale CSS twice** in this session. That note now
+lives in `AGENTS.md` (read by every agent) rather than here, since it is a
+standing repo gotcha, not a record of this pass.
+
+## v3 — the preview is interactive (`645118d`)
+
+The mock played one canned answer and stopped. The four sidebar entries are now
+real `<button>`s: click one and the question re-types, then its answer, chart,
+and SQL replace what was there.
+
+- **`app/data/cannedQueries.ts` (new)** — single source of truth: four entries
+  with question, split answer (`before` / `stat` / `after`), chart label, 12-point
+  normalized `chartData`, `chartDirection`, and SQL. All four are hardcoded.
+  **There is no engine and no input field**, and adding either is out of scope —
+  it would imply a backend that does not exist.
+- **`RevenueChart`** now takes `data` / `label` / `direction` as props instead of
+  hardcoding one ascending series. `direction` deliberately **does not touch the
+  palette** — a falling line stays brick, it does not turn red, and `delta-up`
+  green stays reserved. It only describes the trend in `aria-label`, for readers
+  who cannot see the shape.
+- **Each dataset matches its sentence.** The old chart climbed while the answer
+  said signups *fell 18%* — the same fabricated-dashboard tell this project keeps
+  removing. Rule for future edits: **change a stat, change its chart.**
+
+Behaviour worth preserving:
+
+- Switching cancels in-flight typing, so rapid clicks cannot interleave two
+  questions into one string. Clicking the active question is a no-op.
+- The chart is keyed by question id so its line-draw replays on switch, and still
+  mounts only on reveal behind the 180px placeholder (from `9bba09d`).
+- A user-initiated switch **disconnects the scroll observer** — otherwise a
+  pending first play would type over the question the visitor just chose. Intent
+  outranks the automatic trigger.
+- Below `sm` the sidebar is hidden, which would have made the whole feature
+  invisible on a phone; the questions ride above the input as a scrollable chip
+  row reusing `.scroll-warm` (from `21f6e4c`).
+- Accessibility: the typed text is `aria-hidden` with the full question in an
+  `sr-only` sibling, so screen readers hear the question **once** instead of one
+  character at a time; `aria-live="polite"` sits on the answer block alone.
+
+### Verification performed
+
+Real browser (Playwright, production build), all eight checks from the v3 spec:
+first play on scroll; each of the four switches (typed text, stat, SQL and chart
+trend all matching); rapid-click with no interleaving; active-click no-op;
+keyboard Tab/Enter with a visible focus ring; reduced-motion instant complete
+swap; 390px chip row scrolling with no page overflow; and the a11y structure
+above.
 
 ## Still open
 
 Nothing is blocked on a user decision. The brand-palette question left open in v1
-has been answered by v2 (brick). Remaining items are ordinary polish, not
-decisions: real responsive checks on a physical phone, and a copy pass on the
-`layout.tsx` title/description if the user wants different wording.
+was answered by v2 (brick). Remaining items are ordinary polish, not decisions:
+responsive checks on a physical phone, a real screen-reader pass (the a11y
+structure was verified by DOM inspection, not by listening to one), and a copy
+pass on the `layout.tsx` title/description if different wording is wanted.
 
 ## Guardrails — do not reintroduce
 
 - Fabricated stats ("98% accuracy", "$2.84M") or fake customer logos.
+- A stat whose chart tells a different story than its sentence.
 - Generic "The Future of X, Powered by Y" headlines; unlabeled "NEW" badges.
 - Two-hue gradients on UI elements; a second accent hue; decorative glow blobs.
-- Extra animations beyond the single typing moment.
+- New animation types — reuse `cursorBlink`, `fadeUp`, `auraDraw` only.
+- A working input field or anything else implying a backend behind the mock.
 - Inter/Geist as the page font.
