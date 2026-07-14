@@ -58,6 +58,26 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* The default OS scrollbar renders light-on-dark inside the SQL strip and
+   reads as a stray piece of chrome. Thin, warm, and quiet instead. */
+.scroll-warm {
+  scrollbar-width: thin;
+  scrollbar-color: #3a322e transparent;
+}
+.scroll-warm::-webkit-scrollbar {
+  height: 6px;
+}
+.scroll-warm::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-warm::-webkit-scrollbar-thumb {
+  background: #3a322e;
+  border-radius: 999px;
+}
+.scroll-warm::-webkit-scrollbar-thumb:hover {
+  background: #6f2318;
+}
+
 a {
   color: inherit;
 }

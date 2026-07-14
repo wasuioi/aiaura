@@ -151,7 +151,7 @@ export function DashboardPreview() {
                   The placeholder holds the height so nothing shifts. */}
               {done ? <RevenueChart /> : <div className="h-[180px]" />}
 
-              <div className="mt-4 overflow-x-auto rounded-xl border border-warm-800 bg-white/[0.025] px-3.5 py-3">
+              <div className="scroll-warm mt-4 overflow-x-auto rounded-xl border border-warm-800 bg-white/[0.025] px-3.5 pb-2.5 pt-3">
                 <div className="mb-1 font-mono text-[10px] tracking-[0.1em] text-warm-600">
                   SQL AURA RAN
                 </div>
