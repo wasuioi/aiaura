@@ -1,13 +1,20 @@
 "use client";
 
-const DATA = [0.42, 0.35, 0.5, 0.46, 0.62, 0.58, 0.72, 0.68, 0.83, 0.79, 0.92, 0.98];
+// Single brick hue. The old line was a violet-to-cyan gradient — the exact
+// two-hue gradient tell. The area fill still fades, but it's the same hue at
+// different opacities (a shade ramp), not a second color.
+//
+// `direction` deliberately does NOT change the palette: a falling line stays
+// brick, it does not turn red. It only describes the series to screen readers,
+// which cannot see the shape.
+
 const W = 560;
 const H = 180;
 const PAD = 6;
 
-function buildPaths() {
-  const pts = DATA.map((v, i) => {
-    const x = PAD + (i / (DATA.length - 1)) * (W - PAD * 2);
+function buildPaths(data: number[]) {
+  const pts = data.map((v, i) => {
+    const x = PAD + (i / (data.length - 1)) * (W - PAD * 2);
     const y = H - PAD - v * (H - PAD * 2);
     return [x, y] as const;
   });
@@ -20,8 +27,16 @@ function buildPaths() {
   return { pts, linePath, areaPath };
 }
 
-export function RevenueChart() {
-  const { pts, linePath, areaPath } = buildPaths();
+export function RevenueChart({
+  data,
+  label,
+  direction,
+}: {
+  data: number[];
+  label: string;
+  direction: "up" | "down";
+}) {
+  const { pts, linePath, areaPath } = buildPaths(data);
   const [lastX, lastY] = pts[pts.length - 1];
   const strokeLen = 1400;
 
@@ -33,15 +48,13 @@ export function RevenueChart() {
         width="100%"
         height="100%"
         className="block"
+        role="img"
+        aria-label={`${label}: trending ${direction}`}
       >
         <defs>
-          <linearGradient id="auraArea-revenue" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#a855f7" stopOpacity="0.42" />
-            <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="auraLine-revenue" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="100%" stopColor="#22d3ee" />
+          <linearGradient id="brickArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#c4483a" stopOpacity="0.32" />
+            <stop offset="100%" stopColor="#c4483a" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -54,18 +67,18 @@ export function RevenueChart() {
               x2={W}
               y1={y}
               y2={y}
-              stroke="rgba(255,255,255,0.05)"
+              stroke="rgba(240,235,231,0.05)"
               strokeWidth={1}
             />
           );
         })}
 
-        <path d={areaPath} fill="url(#auraArea-revenue)" />
+        <path d={areaPath} fill="url(#brickArea)" />
 
         <path
           d={linePath}
           fill="none"
-          stroke="url(#auraLine-revenue)"
+          stroke="#d4664f"
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -76,8 +89,8 @@ export function RevenueChart() {
           }}
         />
 
-        <circle cx={lastX} cy={lastY} r={6} fill="#22d3ee" opacity={0.25} />
-        <circle cx={lastX} cy={lastY} r={3.2} fill="#22d3ee" />
+        <circle cx={lastX} cy={lastY} r={6} fill="#d4664f" opacity={0.25} />
+        <circle cx={lastX} cy={lastY} r={3.2} fill="#d4664f" />
       </svg>
     </div>
   );
